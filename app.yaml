@@ -1,0 +1,32 @@
+# app.yaml
+runtime: php74 # Hoặc php81, php82 nếu bạn muốn dùng phiên bản mới hơn
+entrypoint: serve index.php # Điểm vào chính của ứng dụng
+instance_class: F1 # Loại instance cơ bản (miễn phí hoặc chi phí thấp)
+
+automatic_scaling:
+  max_instances: 5 # Giới hạn số lượng instance
+
+handlers:
+# Quy tắc 1: Cho phép tất cả các file .php được xử lý bởi PHP runtime
+- url: /(.*)\.php$
+  script: auto
+
+# Quy tắc 2: Định tuyến các URL còn lại qua index.php
+# Điều này là cần thiết nếu bạn có URL tĩnh (CSS, JS, images)
+- url: /
+  static_files: index.php
+  upload: index.php
+  
+- url: /
+  static_dir: .
+  # Nếu bạn cần các đường dẫn khác, hãy thêm chúng vào đây (ví dụ: api/, includes/)
+  
+# Cấu hình môi trường (Quan trọng: Đảm bảo SITE_URL được tự động cập nhật)
+env_variables:
+  # App Engine sẽ cung cấp biến môi trường cho URL và cổng
+  # Bạn KHÔNG cần hardcode SITE_URL trong config.php nữa
+  # (Tham khảo Bước 2 để sửa config.php)
+  # Bạn có thể thêm các biến môi trường khác tại đây (ví dụ: ENCRYPTION_KEY)
+  # ENCRYPTION_KEY: "iot2024@color@detection@system" 
+  
+# Cấu hình mạng (Nếu bạn cần kết nối private với VPC, nhưng MongoDB Atlas đã là public nên không cần)

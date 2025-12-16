@@ -1,0 +1,12 @@
+services:
+- type: web
+  name: iot-php-mongo
+  env: docker
+  # Cổng nội bộ mà Dockerfile đang chạy (mặc định cho PHP-FPM)
+  port: 9000
+  # Lệnh build sẽ là docker build
+  buildCommand: ""
+  startCommand: "php-fpm"
+  # Cấu hình biến môi trường sẽ được Render cung cấp
+  envVars:
+  # Thêm các biến môi trường tại đây
